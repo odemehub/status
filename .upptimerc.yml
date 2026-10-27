@@ -1,31 +1,135 @@
-# Change these first
-owner: upptime # Your GitHub organization or username, where this repository lives
-repo: upptime # The name of this repository
+# Upptime ayar dosyası
+# Bu dosyayı GitHub'daki Upptime reposunun kök dizinindeki .upptimerc.yml ile değiştir.
+# "DEGISTIR" yazan her yeri kendi bilgilerinle güncelle.
+# Doküman: https://upptime.js.org/docs/configuration
 
+owner: odemehub # GitHub organizasyonu
+repo: status # Upptime reposunun adı
+user-agent: odemehub
+
+# Bakım (maintenance) issue'larında expectedDown'da bu slug'ları kullanacaksın.
 sites:
-  - name: Google
-    url: https://www.google.com
-  - name: Wikipedia
-    url: https://en.wikipedia.org
-  - name: Hacker News
-    url: https://news.ycombinator.com
-  - name: Secret Site
-    url: $SECRET_SITE
+  # Laravel'in /up sağlık ucu: uygulama ayaktaysa 200 + "Application up" döner
+  - name: Ödeme API
+    slug: api
+    url: https://app.odemehub.com/up
+    maxResponseTime: 3000 # 3 sn'den yavaşsa "degraded" (yavaş) görünür
+    __dangerous__body_down_if_text_missing: "Application up"
+
+  - name: Merchant Panel
+    slug: merchant-panel
+    url: https://app.odemehub.com/login
+    maxResponseTime: 5000
+
+  - name: Sandbox
+    slug: sandbox
+    url: https://sandbox.odemehub.com/up
+    maxResponseTime: 5000
+    __dangerous__body_down_if_text_missing: "Application up"
+
+  - name: Website
+    slug: website
+    url: https://odemehub.com
+    maxResponseTime: 5000
+
+  # TCP portu kontrolü örneği (ör. veritabanı / SFTP):
+  # - name: Veritabanı
+  #   slug: veritabani
+  #   check: "tcp-ping"
+  #   url: db.example.com
+  #   port: 5432
+
+# Kesinti issue'larının atanacağı GitHub kullanıcıları (opsiyonel)
+# assignees:
+#   - DEGISTIR-github-kullanici
+
+# Sadece kullandığın secret'ları listele (GH_PAT burada yazılmaz).
+# Bildirim kurmazsan bu liste boş kalabilir: secrets: []
+secrets:
+  - NOTIFICATION_TELEGRAM
+  - NOTIFICATION_TELEGRAM_BOT_KEY
+  - NOTIFICATION_TELEGRAM_CHAT_ID
+
+# 15 dk'dan kısa süren kesintilerin issue'ları silinmesin, geçmişte görünsün
+skipDeleteIssues: true
 
 status-website:
-  # Add your custom domain name, or remove the `cname` line if you don't have a domain
-  # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
-  cname: demo.upptime.js.org
-  # baseUrl: /your-repo-name
-  logoUrl: https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/icon.svg
-  name: Upptime
-  introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
-  introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
+  cname: status.odemehub.com # DNS: status CNAME odemehub.github.io
+  name: ödemehub Status
+  logoUrl: https://odemehub.com/wp-content/uploads/2026/09/odemehub-primary-logo-300x67.png
+  favicon: https://odemehub.com/wp-content/uploads/2026/09/cropped-odemehub-favicon-192x192.png
+  theme: light # light, dark, night, ocean
+  introTitle: "**ödemehub** servis durumu"
+  introMessage: >-
+    Bu sayfa ödemehub servislerinin anlık durumunu gösterir.
+    Kesinti ve planlı bakımlar burada duyurulur.
   navbar:
-    - title: Status
+    - title: Durum
       href: /
-    - title: GitHub
-      href: https://github.com/$OWNER/$REPO
+    - title: ödemehub.com
+      href: https://odemehub.com
 
-# Upptime also supports notifications, assigning issues, and more
-# See https://upptime.js.org/docs/configuration
+# Status sayfası ve README metinlerinin Türkçesi
+# Tam liste: https://github.com/upptime/status-page/blob/master/i18n.yml
+i18n:
+  activeIncidents: Aktif Olaylar
+  allSystemsOperational: Tüm sistemler çalışıyor
+  incidentReport: "Olay #$NUMBER raporu →"
+  activeIncidentSummary: $DATE tarihinde açıldı, $POSTS güncelleme
+  incidentTitle: Olay $NUMBER Detayları
+  incidentDetails: Olay Detayları
+  incidentFixed: Çözüldü
+  incidentOngoing: Devam ediyor
+  incidentOpenedAt: Açılış
+  incidentClosedAt: Kapanış
+  incidentViewOnGitHub: GitHub'da görüntüle ve takip et
+  incidentCommentSummary: $DATE tarihinde $AUTHOR tarafından
+  incidentBack: ← Tüm olaylara dön
+  pastIncidents: Geçmiş Olaylar
+  pastIncidentsResolved: $MINUTES dakikada çözüldü, $POSTS güncelleme
+  liveStatus: Anlık Durum
+  overallUptime: "Toplam uptime: $UPTIME"
+  overallUptimeTitle: Toplam uptime
+  averageResponseTime: "Ortalama yanıt süresi: $TIMEms"
+  averageResponseTimeTitle: Ortalama yanıt
+  sevelDayResponseTime: 7 günlük yanıt süresi
+  responseTimeMs: Yanıt süresi (ms)
+  up: Çalışıyor
+  down: Erişilemiyor
+  degraded: Yavaş
+  ms: ms
+  loading: Yükleniyor
+  navGitHub: GitHub
+  footer: Bu sayfa [açık kaynaktır]($REPO), [Upptime](https://upptime.js.org) ile çalışır
+  rateLimitExceededTitle: İstek limiti aşıldı
+  rateLimitExceededIntro: Bir saat içinde yapılabilecek istek sayısını aştınız. Biraz bekleyip tekrar deneyin veya bir GitHub Personal Access Token ekleyin.
+  rateLimitExceededWhatDoesErrorMean: Bu hata ne anlama geliyor?
+  rateLimitExceededErrorMeaning: Bu sayfa anlık durum verilerini GitHub API'sinden alır. GitHub her IP adresine saatte 60 istek hakkı tanır ve bu limit doldu.
+  rateLimitExceededErrorHowCanFix: Nasıl düzeltebilirim?
+  rateLimitExceededErrorFix: Bir saat beklerseniz limitiniz yenilenir. Alternatif olarak bir GitHub Personal Access Token ekleyerek saatte 5.000 istek hakkı alabilirsiniz.
+  rateLimitExceededGeneratePAT: Personal Access Token nasıl oluşturulur?
+  rateLimitExceededHasSet: Bir personal access token tanımlı.
+  rateLimitExceededRemoveToken: Token'ı kaldır
+  rateLimitExceededGitHubPAT: GitHub Personal Access Token
+  rateLimitExceededCopyPastePAT: Token'ınızı yapıştırın
+  rateLimitExceededSaveToken: Token'ı kaydet
+  errorTitle: Bir hata oluştu
+  errorIntro: Güncel durum bilgileri alınırken bir hata oluştu.
+  errorText: Birkaç dakika sonra tekrar deneyin.
+  errorHome: Ana sayfaya dön
+  pastScheduledMaintenance: Geçmiş Planlı Bakımlar
+  scheduledMaintenance: Planlı Bakım
+  scheduledMaintenanceSummaryStarted: $DATE tarihinde başladı, $DURATION dakika
+  scheduledMaintenanceSummaryStarts: $DATE tarihinde başlayacak, $DURATION dakika
+  startedAt: Başlangıç
+  startsAt: Başlayacak
+  duration: Süre
+  durationMin: $DURATION dakika
+  incidentCompleted: Tamamlandı
+  incidentScheduled: Planlandı
+  duration24H: 24s
+  duration7D: 7g
+  duration30D: 30g
+  duration1Y: 1y
+  durationAll: tümü
+  locale: tr-TR
